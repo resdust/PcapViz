@@ -11,7 +11,7 @@ const themeColor = [
 ];
 const labelStyle = {
   textStyle: {
-    color: '#fff',
+    color: '#000',
     fontSize: '1rem',
     lineHeight: 20,
     padding: 3
@@ -20,7 +20,7 @@ const labelStyle = {
 const titleStyle = {
   textStyle: {
     fontSize: '1.2rem',
-    color: 'rgba(255, 255, 255, 0.7)',
+    color: 'rgba(0, 0, 0, 0.7)',
     // textBorderColor: '#fff',
     // textBorderWidth: 1,
     textShadowColor: 'rgba(200, 200, 200, 0.3)',
@@ -38,7 +38,7 @@ const myItemStyle = {
 }
 const splitLineStyle = {
   lineStyle: {
-    color: "rgba(255,255,255,0.1)"
+    color: "rgba(0,0,0,0.1)"
   }
 };
 

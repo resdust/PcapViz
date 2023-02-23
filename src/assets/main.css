@@ -30,6 +30,7 @@ a,
   body {
     display: flex;
     place-items: center;
+    align-items: flex-start
   }
 
   #app {

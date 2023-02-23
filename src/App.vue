@@ -21,11 +21,19 @@ import HelloWorld from './components/HelloWorld.vue'
 
 <style scoped>
 header {
+  padding: 1rem var(--section-gap);
   line-height: 1.5;
   max-height: 100vh;
 }
 
-.logo {
+main {
+  /* padding: 1rem var(--section-gap); */
+  width: 100%;
+  height: 100%;
+  max-height: 120rem;
+}
+
+main .logo {
   display: block;
   margin: 0 auto 2rem;
 }
