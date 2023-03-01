@@ -1,18 +1,21 @@
 <script setup>
 // load json file from server
 import { ref, watch, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useDailyVolumeStore } from '@/stores/index.js'
 import { storeToRefs } from 'pinia'
 import * as echarts from 'echarts'
 import styles from '@/assets/styles.js'
 
-var inteval = '600'
+const route = useRoute()
+
+const inteval = route.params.interval
 const title = 'Volume of Access over Time'
 const store = useDailyVolumeStore()
-store.getVolumeData(inteval)
 const { volumeData } = storeToRefs(store)
 
 const dailyVolumeChart = ref(null)
+store.getVolumeData(inteval)
 
 const options = {
   title: {
