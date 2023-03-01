@@ -6,8 +6,8 @@ import { storeToRefs } from 'pinia'
 import * as echarts from 'echarts'
 import styles from '@/assets/styles.js'
 
-var inteval = '10'
-const title = 'Count of Access to Honeypot'
+var inteval = '600'
+const title = 'Volume of Access over Time'
 const store = useDailyVolumeStore()
 store.getVolumeData(inteval)
 const { volumeData } = storeToRefs(store)

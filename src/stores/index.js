@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-export const useDailyVolumeStore = defineStore('dailyVolume', {
+const useDailyVolumeStore = defineStore('dailyVolume', {
   state: () => ({
     volumeData: [['1','2'],['3','4']]
   }),
@@ -17,7 +17,8 @@ export const useDailyVolumeStore = defineStore('dailyVolume', {
   },
   actions: {
     getVolumeData(interval='10') {
-      const url = 'http://127.0.0.1:5000/data' + '?interval=' + interval
+      const url = 'http://127.0.0.1:5000/data' + '?interval=' + interval 
+      // + '&date=' + '20230114'
       axios.get(url).then(
         (res) => {
           if (res.status == 200) {
@@ -25,7 +26,7 @@ export const useDailyVolumeStore = defineStore('dailyVolume', {
             this.volumeData = res.data
             console.log('volumeData', [this.volumeData])
           } else {
-            console.error('request fails:', res)
+            console.error('data request fails:', res)
             console.error('error code:', res.status)
           }
         },
@@ -37,3 +38,32 @@ export const useDailyVolumeStore = defineStore('dailyVolume', {
     },
   },
 })
+
+const useIPCountStore = defineStore('ipCount', {
+  state: () => ({
+    IPCount: []
+  }),
+  getters: {
+    pieChartData: (state) => {
+      return state.IPCount
+    }
+  },
+  actions: {
+    getIPCount() {
+      const url = 'http://127.0.0.1:5000/data' + '?type=' + 'ip'
+      axios.get(url).then(
+        (res) => {
+          if (res.status == 200) {
+            // console.log('res',res);
+            this.IPCount = res.data
+            console.log('IPCount', [this.IPCount])
+          } else {
+            console.error('IPCount request fails:', res)
+            console.error('error code:', res.status)
+          }
+        }
+      )
+    },
+  },
+})
+export {useDailyVolumeStore, useIPCountStore}

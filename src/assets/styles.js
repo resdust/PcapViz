@@ -33,7 +33,7 @@ const myItemStyle = {
     borderColor: '#fff',
     borderWidth: 1,
     shadowColor: 'rgba(0, 0, 0, 0.5)',
-    shadowBlur: 10,
+    // shadowBlur: 10,
   },
 }
 const splitLineStyle = {
