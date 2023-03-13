@@ -2,7 +2,7 @@
 // load json file from server
 import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { useDailyVolumeStore } from '@/stores/index.js'
+import { usePortVolumeStore } from '@/stores/index.js'
 import { storeToRefs } from 'pinia'
 import * as echarts from 'echarts'
 import styles from '@/assets/styles.js'
@@ -12,7 +12,7 @@ const route = useRoute()
 const inteval = route.params.interval
 // convert inteval from seconds to mininutes, remaining 2 decimal places
 const title = 'Volume of Access over Each ' + parseInt(route.params.interval) + ' mins'
-const store = useDailyVolumeStore()
+const store = usePortVolumeStore()
 const { volumeData } = storeToRefs(store)
 
 const dailyVolumeChart = ref(null)
@@ -32,31 +32,6 @@ const options = {
     itemStyle: styles.myItemStyle.itemStyle,
   },
   color: styles.themeColor,
-  // visualMap: {
-  //   top: 50,
-  //   right: 10,
-  //   pieces: [
-  //     {
-  //       gt: 0,
-  //       lte: 10,
-  //       color: styles.themeColor[0]
-  //     },
-  //     {
-  //       gt: 10,
-  //       lte: 100,
-  //       color: '#FC7D02'
-  //     },
-  //     {
-  //       gt: 100,
-  //       lte: 1000,
-  //       color: '#FD0100'
-  //     },
-  //     {
-  //       gt: 1000,
-  //       color: '#AA069F'
-  //     },
-  //   ]
-  // },
   toolbox: {
     feature: {
       dataZoom: {
@@ -104,35 +79,27 @@ var thisChart = null
 
 const reRender = function (store) {
   console.log('rerender...')
+  datas = store.portVolume
+  seriesData = []
+
+  for (let i = 0; i < datas.length; i++) {
+    seriesData.push({
+      name: datas[i].port,
+      type: 'bar',
+      stack: 'total',
+      data: datas[i].volume,
+      emphasis: {
+        focus: 'series'
+      },
+    })
+  }
   thisChart.setOption({
     xAxis: {
       type: 'category',
       data: store.Timeline,
     },
     yAxis: {},
-    series: [
-      {
-        name: 'UDP',
-        type: 'bar',
-        stack: 'total',
-        data: store.UDPVolume,
-        emphasis: {
-          focus: 'series'
-        },
-      },
-      {
-        name: 'TCP',
-        type: 'bar',
-        stack: 'total',
-        data: store.TCPVolume,
-        itemSteyle: {
-          color: '#e67e22',
-        },
-        emphasis: {
-          focus: 'series'
-        },
-      },
-    ]
+    series: seriesData
   })
   thisChart.hideLoading()
 }

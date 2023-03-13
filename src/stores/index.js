@@ -1,18 +1,55 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-const useDailyVolumeStore = defineStore('dailyVolume', {
+const usePortVolumeStore = defineStore('dailyVolume', {
   state: () => ({
-    volumeData: [['1','2'],['3','4']]
+    volumeData: {}
   }),
   getters: {
-    volumeDataX: (state) => {
-      // console.log('getter volumeDataX', state.volumeData[0])
-      return state.volumeData[0]
+    Timeline: (state) => {
+      return state.volumeData.timeseries
     },
-    volumeDataY: (state) => {
-      // console.log('getter volumeDataY', state.volumeData[1])
-      return state.volumeData[1]
+    portVolume: (state) => {
+      return state.volumeData.portVolume
+    }
+  },
+  actions: {
+    getVolumeData(interval='10') {
+      const url = 'http://127.0.0.1:5000/data' + '?interval=' + interval 
+      + '&type=port'
+      axios.get(url).then(
+        (res) => {
+          if (res.status == 200) {
+            // console.log('res',res);
+            this.volumeData = res.data
+            console.log('volumeData', this.volumeData)
+          } else {
+            console.error('data request fails:', res)
+            console.error('error code:', res.status)
+          }
+        },
+    
+        (error) => {
+          console.log('request fails', error)
+        },
+      )
+    },
+  },
+})
+
+const useDailyVolumeStore = defineStore('dailyVolume', {
+  state: () => ({
+    volumeData: {}
+  }),
+  getters: {
+    Timeline: (state) => {
+      return state.volumeData.timeseries
+    },
+    UDPVolume: (state) => {
+      return state.volumeData.UDP
+    },
+    TCPVolume: (state) => {
+      return state.volumeData.TCP
     }
   },
   actions: {
@@ -24,7 +61,7 @@ const useDailyVolumeStore = defineStore('dailyVolume', {
           if (res.status == 200) {
             // console.log('res',res);
             this.volumeData = res.data
-            console.log('volumeData', [this.volumeData])
+            console.log('volumeData', this.volumeData)
           } else {
             console.error('data request fails:', res)
             console.error('error code:', res.status)
@@ -66,4 +103,4 @@ const useIPCountStore = defineStore('ipCount', {
     },
   },
 })
-export {useDailyVolumeStore, useIPCountStore}
+export {useDailyVolumeStore, usePortVolumeStore, useIPCountStore}

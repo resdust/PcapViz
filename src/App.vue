@@ -9,7 +9,8 @@ import HelloWorld from './components/HelloWorld.vue'
       <h1>Visualization of Honeypot Network Traces</h1>
 
       <nav>
-        <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/">Protocols</RouterLink>
+        <RouterLink to="/port/10">Ports</RouterLink>
         <RouterLink to="/ipcount">IP Statistic</RouterLink>
       </nav>
     </div>
