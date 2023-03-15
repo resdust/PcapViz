@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-const usePortVolumeStore = defineStore('dailyVolume', {
+const usePortVolumeStore = defineStore('portTimeVolume', {
   state: () => ({
     volumeData: {}
   }),
@@ -37,7 +37,7 @@ const usePortVolumeStore = defineStore('dailyVolume', {
   },
 })
 
-const useDailyVolumeStore = defineStore('dailyVolume', {
+const useDailyVolumeStore = defineStore('timeVolume', {
   state: () => ({
     volumeData: {}
   }),

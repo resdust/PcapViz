@@ -1,19 +1,18 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+
+document.title = 'Viz of Honeypot Network Traffic'
 </script>
 
 <template>
   <header>
-    <div class="wrapper">
-      <h1>Visualization of Honeypot Network Traces</h1>
+    <!-- <h1>Visualization of Honeypot Network Traces</h1> -->
 
-      <nav>
-        <RouterLink to="/">Protocols</RouterLink>
-        <RouterLink to="/port/10">Ports</RouterLink>
-        <RouterLink to="/ipcount">IP Statistic</RouterLink>
-      </nav>
-    </div>
+    <nav>
+      <RouterLink to="/">Protocols</RouterLink>
+      <RouterLink to="/port/10">Ports</RouterLink>
+      <RouterLink to="/ipcount">IP Statistic</RouterLink>
+    </nav>
   </header>
   <main>
     <RouterView />
@@ -22,7 +21,6 @@ import HelloWorld from './components/HelloWorld.vue'
 
 <style scoped>
 header {
-  padding: 1rem var(--section-gap);
   line-height: 1.5;
   max-height: 100vh;
 }
@@ -32,6 +30,10 @@ main {
   width: 100%;
   height: 100%;
   max-height: 120rem;
+  display: flex;
+  max-height: 120rem;
+  flex-direction: column;
+  align-items: center;
 }
 
 main .logo {
@@ -40,10 +42,16 @@ main .logo {
 }
 
 nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  font-size: 12px;
+  margin-left: -1rem;
+  font-size: 1rem;
   text-align: center;
-  margin-top: 2rem;
+
+  padding: 1rem 0;
 }
 
 nav a.router-link-exact-active {
@@ -81,13 +89,5 @@ nav a:first-of-type {
     flex-wrap: wrap;
   }
 
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
 }
 </style>

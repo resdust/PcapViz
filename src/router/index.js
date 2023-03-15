@@ -8,7 +8,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/600',
+      redirect: '/60',
     },
     {
       path: '/:interval',

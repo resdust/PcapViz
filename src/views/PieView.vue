@@ -105,11 +105,6 @@ onMounted(() => {
 </template>
 
 <style>
-div .chart {
-  width: 100%;
-  height: 60vh;
-}
-
 @media (min-width: 1024px) {
   .about {
     min-height: 100vh;

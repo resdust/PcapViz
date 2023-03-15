@@ -79,8 +79,8 @@ var thisChart = null
 
 const reRender = function (store) {
   console.log('rerender...')
-  datas = store.portVolume
-  seriesData = []
+  var datas = store.portVolume
+  var seriesData = []
 
   for (let i = 0; i < datas.length; i++) {
     seriesData.push({
@@ -130,9 +130,4 @@ onMounted(() => {
   <div ref="dailyVolumeChart" class="chart"></div>
 </template>
 
-<style scoped>
-div .chart {
-  width: 100%;
-  height: 60vh;
-}
-</style>
+<style scoped></style>

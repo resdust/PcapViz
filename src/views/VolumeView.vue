@@ -116,6 +116,7 @@ const reRender = function (store) {
         type: 'bar',
         stack: 'total',
         data: store.UDPVolume,
+        large: true,
         emphasis: {
           focus: 'series'
         },
@@ -125,6 +126,7 @@ const reRender = function (store) {
         type: 'bar',
         stack: 'total',
         data: store.TCPVolume,
+        large: true,
         itemSteyle: {
           color: '#e67e22',
         },
@@ -163,9 +165,4 @@ onMounted(() => {
   <div ref="dailyVolumeChart" class="chart"></div>
 </template>
 
-<style scoped>
-div .chart {
-  width: 100%;
-  height: 60vh;
-}
-</style>
+<style scoped></style>
