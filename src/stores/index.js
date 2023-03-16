@@ -14,7 +14,7 @@ const usePortVolumeStore = defineStore('portTimeVolume', {
     }
   },
   actions: {
-    getVolumeData(interval='10') {
+    getVolumeData(interval='60') {
       const url = 'http://127.0.0.1:5000/data' + '?interval=' + interval 
       + '&type=port'
       axios.get(url).then(
@@ -37,7 +37,7 @@ const usePortVolumeStore = defineStore('portTimeVolume', {
   },
 })
 
-const useDailyVolumeStore = defineStore('timeVolume', {
+const useTimeVolumeStore = defineStore('timeVolume', {
   state: () => ({
     volumeData: {}
   }),
@@ -45,15 +45,21 @@ const useDailyVolumeStore = defineStore('timeVolume', {
     Timeline: (state) => {
       return state.volumeData.timeseries
     },
-    UDPVolume: (state) => {
-      return state.volumeData.UDP
+    UDPOutVolume: (state) => {
+      return state.volumeData.UDP_out
     },
-    TCPVolume: (state) => {
-      return state.volumeData.TCP
+    UDPInVolume: (state) => {
+      return state.volumeData.UDP_in
+    },
+    TCPOutVolume: (state) => {
+      return state.volumeData.TCP_out
+    },
+    TCPInVolume: (state) => {
+      return state.volumeData.TCP_in
     }
   },
   actions: {
-    getVolumeData(interval='10') {
+    getVolumeData(interval='60') {
       const url = 'http://127.0.0.1:5000/data' + '?interval=' + interval 
       // + '&date=' + '20230114'
       axios.get(url).then(
@@ -103,4 +109,4 @@ const useIPCountStore = defineStore('ipCount', {
     },
   },
 })
-export {useDailyVolumeStore, usePortVolumeStore, useIPCountStore}
+export {useTimeVolumeStore as useDailyVolumeStore, usePortVolumeStore, useIPCountStore}

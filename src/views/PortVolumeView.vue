@@ -11,7 +11,7 @@ const route = useRoute()
 
 const inteval = route.params.interval
 // convert inteval from seconds to mininutes, remaining 2 decimal places
-const title = 'Volume of Access over Each ' + parseInt(route.params.interval) + ' mins'
+const title = 'Packets for Functional Ports over Each ' + parseInt(route.params.interval) + ' mins'
 const store = usePortVolumeStore()
 const { volumeData } = storeToRefs(store)
 
@@ -28,10 +28,10 @@ const options = {
     textStyle: styles.labelStyle.textStyle,
     right: '10%',
     top: '10%',
-    orient: 'vertical',
+    orient: 'horizontal',
     itemStyle: styles.myItemStyle.itemStyle,
   },
-  color: styles.themeColor,
+  // color: styles.themeColor,
   toolbox: {
     feature: {
       dataZoom: {
@@ -82,12 +82,20 @@ const reRender = function (store) {
   var datas = store.portVolume
   var seriesData = []
 
+  var colorMap = {}
+  for (let i = 0; i < datas.length / 2 + 1; i++) {
+    colorMap[datas[i].port] = styles.themeColor[i]
+  }
+
   for (let i = 0; i < datas.length; i++) {
     seriesData.push({
-      name: datas[i].port,
+      name: datas[i].port + ' ' + datas[i].direction,
       type: 'bar',
-      stack: 'total',
+      stack: datas[i].direction,
       data: datas[i].volume,
+      itemSteyle: {
+        color: colorMap[datas[i].port],
+      },
       emphasis: {
         focus: 'series'
       },

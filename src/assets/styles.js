@@ -3,6 +3,7 @@ const themeColor = [
   '#f1c40f',
   '#e67e22',
   '#3498db',
+  '#2980b9',
   '#f39c12',
   '#1abc9c',
   '#9b59b6',

@@ -2,7 +2,7 @@
 // load json file from server
 import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { useDailyVolumeStore } from '@/stores/index.js'
+import { useDailyVolumeStore as useTimeVolumeStore } from '@/stores/index.js'
 import { storeToRefs } from 'pinia'
 import * as echarts from 'echarts'
 import styles from '@/assets/styles.js'
@@ -11,8 +11,8 @@ const route = useRoute()
 
 const inteval = route.params.interval
 // convert inteval from seconds to mininutes, remaining 2 decimal places
-const title = 'Volume of Access over Each ' + parseInt(route.params.interval) + ' mins'
-const store = useDailyVolumeStore()
+const title = 'Packets over Each ' + parseInt(route.params.interval) + ' mins'
+const store = useTimeVolumeStore()
 const { volumeData } = storeToRefs(store)
 
 const dailyVolumeChart = ref(null)
@@ -28,10 +28,10 @@ const options = {
     textStyle: styles.labelStyle.textStyle,
     right: '10%',
     top: '10%',
-    orient: 'vertical',
+    orient: 'horizontal',
     itemStyle: styles.myItemStyle.itemStyle,
   },
-  color: styles.themeColor,
+  // color: styles.themeColor,
   // visualMap: {
   //   top: 50,
   //   right: 10,
@@ -112,23 +112,52 @@ const reRender = function (store) {
     yAxis: {},
     series: [
       {
-        name: 'UDP',
+        name: 'UDP output',
         type: 'bar',
-        stack: 'total',
-        data: store.UDPVolume,
+        stack: 'out',
+        data: store.UDPOutVolume,
         large: true,
+        itemSteyle: {
+          color: '#e67e22',
+        },
         emphasis: {
           focus: 'series'
         },
       },
       {
-        name: 'TCP',
+        name: 'UDP income',
         type: 'bar',
-        stack: 'total',
-        data: store.TCPVolume,
+        stack: 'in',
+        data: store.UDPInVolume,
         large: true,
         itemSteyle: {
-          color: '#e67e22',
+          color: '#d35400',
+        },
+        emphasis: {
+          focus: 'series'
+        },
+      },
+      {
+        name: 'TCP output',
+        type: 'bar',
+        stack: 'out',
+        data: store.TCPOutVolume,
+        large: true,
+        itemSteyle: {
+          color: '#3498db',
+        },
+        emphasis: {
+          focus: 'series'
+        },
+      },
+      {
+        name: 'TCP income',
+        type: 'bar',
+        stack: 'in',
+        data: store.TCPInVolume,
+        large: true,
+        itemSteyle: {
+          color: '#2980b9',
         },
         emphasis: {
           focus: 'series'
