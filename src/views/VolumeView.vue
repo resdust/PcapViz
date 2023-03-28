@@ -21,8 +21,9 @@ store.getVolumeData(inteval)
 const options = {
   title: {
     textStyle: styles.titleStyle.textStyle,
-    bottom: '5%',
+    top: '2%',
     left: 'center',
+    text: title,
   },
   legend: {
     textStyle: styles.labelStyle.textStyle,
@@ -114,7 +115,7 @@ const reRender = function (store) {
       {
         name: 'UDP output',
         type: 'bar',
-        stack: 'out',
+        stack: 'total',
         data: store.UDPOutVolume,
         large: true,
         itemSteyle: {
@@ -127,7 +128,7 @@ const reRender = function (store) {
       {
         name: 'UDP income',
         type: 'bar',
-        stack: 'in',
+        stack: 'total',
         data: store.UDPInVolume,
         large: true,
         itemSteyle: {
@@ -140,7 +141,7 @@ const reRender = function (store) {
       {
         name: 'TCP output',
         type: 'bar',
-        stack: 'out',
+        stack: 'total',
         data: store.TCPOutVolume,
         large: true,
         itemSteyle: {
@@ -153,7 +154,7 @@ const reRender = function (store) {
       {
         name: 'TCP income',
         type: 'bar',
-        stack: 'in',
+        stack: 'total',
         data: store.TCPInVolume,
         large: true,
         itemSteyle: {
@@ -190,7 +191,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1>{{ title }}</h1>
+  <!-- <h1>{{ title }}</h1> -->
   <div ref="dailyVolumeChart" class="chart"></div>
 </template>
 

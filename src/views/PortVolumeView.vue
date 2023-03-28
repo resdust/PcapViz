@@ -21,8 +21,9 @@ store.getVolumeData(inteval)
 const options = {
   title: {
     textStyle: styles.titleStyle.textStyle,
-    bottom: '5%',
+    top: '2%',
     left: 'center',
+    text: title,
   },
   legend: {
     textStyle: styles.labelStyle.textStyle,
@@ -89,9 +90,9 @@ const reRender = function (store) {
 
   for (let i = 0; i < datas.length; i++) {
     seriesData.push({
-      name: datas[i].port + ' ' + datas[i].direction,
+      name: datas[i].port,
       type: 'bar',
-      stack: datas[i].direction,
+      stack: 'total',
       data: datas[i].volume,
       itemSteyle: {
         color: colorMap[datas[i].port],
@@ -131,11 +132,20 @@ onMounted(() => {
   })
 })
 
+function selectRangeEvent() {
+  console.log('selectRangeEvent')
+  thisChart.dispatchAction({
+    type: 'dataZoom',
+    start: 10,
+    end: 20
+  })
+}
 </script>
 
 <template>
-  <h1>{{ title }}</h1>
+  <!-- <h1>{{ title }}</h1> -->
   <div ref="dailyVolumeChart" class="chart"></div>
+  <button @click="selectRangeEvent">click me</button>
 </template>
 
 <style scoped></style>
