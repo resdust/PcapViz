@@ -3,8 +3,8 @@
 import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useTimeVolumeStore } from '@/stores/index.js'
-import { storeToRefs } from 'pinia'
 import formItem from '@/components/formItem.vue'
+import { storeToRefs } from 'pinia'
 import { selectChartRange } from '@/utils/chartUtils.js'
 import * as echarts from 'echarts'
 import styles from '@/assets/styles.js'
@@ -36,32 +36,6 @@ const options = {
     orient: 'horizontal',
     itemStyle: styles.myItemStyle.itemStyle,
   },
-  // color: styles.themeColor,
-  // visualMap: {
-  //   top: 50,
-  //   right: 10,
-  //   pieces: [
-  //     {
-  //       gt: 0,
-  //       lte: 10,
-  //       color: styles.themeColor[0]
-  //     },
-  //     {
-  //       gt: 10,
-  //       lte: 100,
-  //       color: '#FC7D02'
-  //     },
-  //     {
-  //       gt: 100,
-  //       lte: 1000,
-  //       color: '#FD0100'
-  //     },
-  //     {
-  //       gt: 1000,
-  //       color: '#AA069F'
-  //     },
-  //   ]
-  // },
   toolbox: {
     feature: {
       dataZoom: {
@@ -79,8 +53,7 @@ const options = {
     }
   },
   grid: {
-    bottom: 90,
-    left: 100,
+    bottom: 90
   },
   dataZoom: [{
     type: 'inside'
@@ -108,9 +81,7 @@ const options = {
       type: 'value',
       name: 'Volume',
       axisLabel: {
-        formatter: function (value, index) {
-          return (value / 1000).toFixed(2) + ' KB';
-        }
+        formatter: '{value} KB'
       }
     }
   ],
@@ -123,7 +94,6 @@ var thisChart = null
 
 const reRender = function (store) {
   console.log('rerender...')
-  console.log(store)
   thisChart.setOption({
     xAxis: {
       type: 'category',
@@ -132,15 +102,11 @@ const reRender = function (store) {
     yAxis: {},
     series: [
       {
-        name: 'Outgoing',
+        name: 'UDP output',
         type: 'line',
-        data: store.OutPackets,
+        stack: 'total',
+        data: store.UDPOutVolume,
         large: true,
-        tooltip: {
-          valueFormatter: function (value) {
-            return value + ' Packets';
-          }
-        },
         itemSteyle: {
           color: '#e67e22',
         },
@@ -149,15 +115,11 @@ const reRender = function (store) {
         },
       },
       {
-        name: 'Incoming',
+        name: 'UDP income',
         type: 'line',
-        data: store.InPackets,
+        stack: 'total',
+        data: store.UDPInVolume,
         large: true,
-        tooltip: {
-          valueFormatter: function (value) {
-            return value + ' Packets';
-          }
-        },
         itemSteyle: {
           color: '#d35400',
         },
@@ -166,17 +128,11 @@ const reRender = function (store) {
         },
       },
       {
-        name: 'Outgoing',
-        type: 'bar',
+        name: 'TCP output',
+        type: 'line',
         stack: 'total',
-        yAxisIndex: 1,
-        data: store.OutBytes,
+        data: store.TCPOutVolume,
         large: true,
-        tooltip: {
-          valueFormatter: function (value) {
-            return (value / 1000).toFixed(2) + ' KB';
-          }
-        },
         itemSteyle: {
           color: '#3498db',
         },
@@ -185,17 +141,11 @@ const reRender = function (store) {
         },
       },
       {
-        name: 'Incoming',
-        type: 'bar',
+        name: 'TCP income',
+        type: 'line',
         stack: 'total',
-        yAxisIndex: 1,
-        data: store.InBytes,
+        data: store.TCPInVolume,
         large: true,
-        tooltip: {
-          valueFormatter: function (value) {
-            return (value / 1000).toFixed(2) + ' KB';
-          }
-        },
         itemSteyle: {
           color: '#2980b9',
         },
@@ -205,12 +155,12 @@ const reRender = function (store) {
       },
     ]
   })
-  handleRangeChange()
+  handleIntervalChange()
   thisChart.hideLoading()
   console.log('rerender done.')
 }
 
-const changeChartTitle = function (title) {
+const chageChartTitle = function (title) {
   thisChart.setOption({
     title: {
       text: title
@@ -257,7 +207,7 @@ function handleRangeChange() {
 function handleIntervalChange() {
   console.log('handleIntervalChange', interval)
   thisChart.showLoading()
-  changeChartTitle(title(interval))
+  chageChartTitle(title(interval))
   store.getVolumeData(interval)
   thisChart.hideLoading()
 }
@@ -271,7 +221,7 @@ function handleIntervalChange() {
           <input v-model="startDate" type="date" placeholder="Select date" @change="handleRangeChange" />
         </formItem>
         <formItem label="Interval (Mins)">
-          <input v-model="interval" type="text" @change="handleIntervalChange" />
+          <input v-model="interval" type="text" @change="handleIntervalChange" @keyup.enter="handleIntervalChange" />
         </formItem>
         <formItem label="Durateion (Days)">
           <!-- select 1 week or 3 days -->
