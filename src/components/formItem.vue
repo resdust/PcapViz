@@ -23,7 +23,7 @@ export default {
 .form-item {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   width: 7rem;
 }
 

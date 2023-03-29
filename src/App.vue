@@ -51,7 +51,7 @@ nav {
   margin-left: -1rem;
   font-size: 1rem;
   text-align: center;
-  padding: 0 1rem 1rem 1rem;
+  padding: 0 1rem;
 }
 
 nav a.router-link-exact-active {

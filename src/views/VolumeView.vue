@@ -200,7 +200,7 @@ onMounted(() => {
   })
 })
 
-let startDate = '2023-03-01'
+let startDate = '2023-02-12'
 let duration = 7
 function handleRangeChange() {
   console.log('handleDateChange', startDate)
@@ -243,6 +243,9 @@ function handleIntervalChange() {
             <option value="7">1 week</option>
             <option value="3">3 days</option>
           </select>
+        </formItem>
+        <formItem label="Refresh">
+          <input type="button" value="Refresh" @click="handleRangeChange" />
         </formItem>
       </div>
     </keep-alive>
