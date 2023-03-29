@@ -4,19 +4,22 @@ import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { usePortVolumeStore } from '@/stores/index.js'
 import { storeToRefs } from 'pinia'
+import formItem from '@/components/formItem.vue'
+import { selectChartRange } from '@/utils/chartUtils.js'
 import * as echarts from 'echarts'
 import styles from '@/assets/styles.js'
 
 const route = useRoute()
 
-const inteval = route.params.interval
-// convert inteval from seconds to mininutes, remaining 2 decimal places
+let interval = route.params.interval
+let showSearchBar = ref(false)
+
 const title = 'Packets for Functional Ports over Each ' + parseInt(route.params.interval) + ' mins'
 const store = usePortVolumeStore()
 const { volumeData } = storeToRefs(store)
 
 const dailyVolumeChart = ref(null)
-store.getVolumeData(inteval)
+store.getVolumeData(interval)
 
 const options = {
   title: {
@@ -110,12 +113,14 @@ const reRender = function (store) {
     yAxis: {},
     series: seriesData
   })
+  handleRangeChange()
   thisChart.hideLoading()
+  console.log('rerender done')
 }
 
 watch(volumeData, (newValue, oldValue) => {
-  console.log('watch volumeData', newValue, oldValue)
   reRender(store)
+  showSearchBar.value = true
 })
 
 onMounted(() => {
@@ -124,7 +129,7 @@ onMounted(() => {
   thisChart.showLoading()
   thisChart.resize()
   thisChart.setOption(options)
-  console.log('options', options)
+  // console.log('options', options)
   // thisChart.hideLoading()
 
   window.addEventListener('resize', function () {
@@ -132,20 +137,78 @@ onMounted(() => {
   })
 })
 
-function selectRangeEvent() {
-  console.log('selectRangeEvent')
-  thisChart.dispatchAction({
-    type: 'dataZoom',
-    start: 10,
-    end: 20
+const changeChartTitle = function (title) {
+  thisChart.setOption({
+    title: {
+      text: title
+    }
   })
+}
+
+let startDate = '2023-02-09'
+let duration = 7
+function handleRangeChange() {
+  console.log('handleDateChange', startDate, duration, 'days')
+
+  const timeseries = volumeData.value.timeseries
+
+  thisChart.showLoading()
+  const originStart = timeseries.slice(0, 1)
+  const originEnd = timeseries.slice(-1)
+  console.log('originStart', originStart)
+  console.log('originEnd', originEnd)
+
+  selectChartRange(thisChart, startDate, duration, originStart, originEnd)
+  thisChart.hideLoading()
+}
+
+
+function handleIntervalChange() {
+  console.log('handleIntervalChange', interval)
+  thisChart.showLoading()
+  changeChartTitle(title(interval))
+  store.getVolumeData(interval)
+  thisChart.hideLoading()
 }
 </script>
 
 <template>
-  <!-- <h1>{{ title }}</h1> -->
-  <div ref="dailyVolumeChart" class="chart"></div>
-  <button @click="selectRangeEvent">click me</button>
+  <div class="wrapper">
+    <keep-alive>
+      <div class="searchBar" v-if="showSearchBar">
+        <formItem label="Start Date">
+          <input v-model="startDate" type="date" placeholder="Select date" @change="handleRangeChange" />
+        </formItem>
+        <formItem label="Interval (Mins)">
+          <input v-model="interval" type="text" @change="handleIntervalChange" />
+        </formItem>
+        <formItem label="Durateion (Days)">
+          <!-- select 1 week or 3 days -->
+          <select v-model="duration" @change="handleRangeChange">
+            <option value="7">1 week</option>
+            <option value="3">3 days</option>
+          </select>
+        </formItem>
+        <formItem label="Refresh">
+          <input type="button" value="Refresh" @click="handleRangeChange" />
+        </formItem>
+      </div>
+    </keep-alive>
+    <div ref="dailyVolumeChart" class="chart"></div>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.wrapper {
+  width: 100%;
+}
+
+.searchBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  column-gap: 0.5rem
+}
+</style>

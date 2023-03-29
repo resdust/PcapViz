@@ -12,14 +12,14 @@ const themeColor = [
 const labelStyle = {
   textStyle: {
     color: '#000',
-    fontSize: '1rem',
+    fontSize: '0.6rem',
     lineHeight: 20,
     padding: 3
   },
 };
 const titleStyle = {
   textStyle: {
-    fontSize: '1.2rem',
+    fontSize: '1rem',
     color: 'rgba(0, 0, 0, 0.7)',
     // textBorderColor: '#fff',
     // textBorderWidth: 1,

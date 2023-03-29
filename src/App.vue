@@ -9,8 +9,8 @@ document.title = 'Viz of Honeypot Network Traffic'
     <!-- <h1>Visualization of Honeypot Network Traces</h1> -->
 
     <nav>
-      <RouterLink to="/">Protocols</RouterLink>
-      <RouterLink to="/port/10">Ports</RouterLink>
+      <RouterLink to="/">Overview</RouterLink>
+      <RouterLink to="/port/60">Ports</RouterLink>
       <RouterLink to="/ipcount">IP Statistic</RouterLink>
     </nav>
   </header>

@@ -45,6 +45,51 @@ const useTimeVolumeStore = defineStore('timeVolume', {
     Timeline: (state) => {
       return state.volumeData.timeseries
     },
+    InPackets: (state) => {
+      return state.volumeData.in_packet
+    },
+    OutPackets: (state) => {
+      return state.volumeData.out_packet
+    },
+    InBytes: (state) => {
+      return state.volumeData.in_byte
+    },
+    OutBytes: (state) => {
+      return state.volumeData.out_byte
+    },
+  },
+  actions: {
+    getVolumeData(interval='60') {
+      const url = 'http://127.0.0.1:5000/data' + '?interval=' + interval 
+      + '&type=' + 'volume' 
+      axios.get(url).then(
+        (res) => {
+          if (res.status == 200) {
+            // console.log('res',res);
+            this.volumeData = res.data
+            console.log('get volumeData', this.volumeData)
+          } else {
+            console.error('data request fails:', res)
+            console.error('error code:', res.status)
+          }
+        },
+    
+        (error) => {
+          console.log('request fails', error)
+        },
+      )
+    },
+  },
+})
+
+const useProtocolVolumeStore = defineStore('protocolVolume', {
+  state: () => ({
+    volumeData: {}
+  }),
+  getters: {
+    Timeline: (state) => {
+      return state.volumeData.timeseries
+    },
     UDPOutVolume: (state) => {
       return state.volumeData.UDP_out
     },
@@ -109,4 +154,4 @@ const useIPCountStore = defineStore('ipCount', {
     },
   },
 })
-export {useTimeVolumeStore as useDailyVolumeStore, usePortVolumeStore, useIPCountStore}
+export {useTimeVolumeStore, usePortVolumeStore, useIPCountStore, useProtocolVolumeStore}
