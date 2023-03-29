@@ -61,13 +61,13 @@ const useTimeVolumeStore = defineStore('timeVolume', {
   actions: {
     getVolumeData(interval='60') {
       const url = 'http://127.0.0.1:5000/data' + '?interval=' + interval 
-      // + '&date=' + '20230114'
+      + '&type=' + 'volume'
       axios.get(url).then(
         (res) => {
           if (res.status == 200) {
             // console.log('res',res);
             this.volumeData = res.data
-            console.log('volumeData', this.volumeData)
+            console.log('get volumeData', this.volumeData)
           } else {
             console.error('data request fails:', res)
             console.error('error code:', res.status)
