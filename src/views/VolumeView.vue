@@ -102,7 +102,22 @@ const options = {
       name: 'Packets',
       axisLabel: {
         formatter: '{value} packets'
-      }
+      },
+      alignTicks: true,
+      max(val) {
+        if (val.min >= 0 && val.max >= 0) return val.max;
+        if (Math.abs(val.max) > Math.abs(val.min)) {
+          return (Math.abs(val.max) * 1.2).toFixed(0);
+        }
+        return (Math.abs(val.min) * 1.2).toFixed(0);
+      },
+      min(val) {
+        if (val.min >= 0 && val.max >= 0) return val.min;
+        if (Math.abs(val.max) > Math.abs(val.min)) {
+          return (-Math.abs(val.max) * 1.2).toFixed(0);
+        }
+        return (-Math.abs(val.min) * 1.2).toFixed(0);
+      },
     },
     {
       type: 'value',
@@ -111,7 +126,22 @@ const options = {
         formatter: function (value, index) {
           return (value / 1000).toFixed(2) + ' KB';
         }
-      }
+      },
+      alignTicks: true,
+      max(val) {
+        if (val.min >= 0 && val.max >= 0) return val.max;
+        if (Math.abs(val.max) > Math.abs(val.min)) {
+          return (Math.abs(val.max) * 1.2).toFixed(0);
+        }
+        return (Math.abs(val.min) * 1.2).toFixed(0);
+      },
+      min(val) {
+        if (val.min >= 0 && val.max >= 0) return val.min;
+        if (Math.abs(val.max) > Math.abs(val.min)) {
+          return (-Math.abs(val.max) * 1.2).toFixed(0);
+        }
+        return (-Math.abs(val.min) * 1.2).toFixed(0);
+      },
     }
   ],
   series: [

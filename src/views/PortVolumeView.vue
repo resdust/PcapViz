@@ -14,7 +14,7 @@ const route = useRoute()
 let interval = route.params.interval
 let showSearchBar = ref(false)
 
-const title = 'Packets for Functional Ports over Each ' + parseInt(route.params.interval) + ' mins'
+const title = (interval) => 'Packets over Each ' + parseInt(interval) + ' mins'
 const store = usePortVolumeStore()
 const { volumeData } = storeToRefs(store)
 
@@ -26,7 +26,7 @@ const options = {
     textStyle: styles.titleStyle.textStyle,
     top: '2%',
     left: 'center',
-    text: title,
+    text: title(interval),
   },
   legend: {
     textStyle: styles.labelStyle.textStyle,
@@ -72,6 +72,9 @@ const options = {
   yAxis: {
     splitArea: {
       show: false
+    },
+    axisLabel: {
+      formatter: '{value} packets'
     }
   },
   series: [
@@ -99,6 +102,11 @@ const reRender = function (store) {
       data: datas[i].volume,
       itemSteyle: {
         color: colorMap[datas[i].port],
+      },
+      tooltip: {
+        valueFormatter: function (value) {
+          return value + ' Packets';
+        }
       },
       emphasis: {
         focus: 'series'
