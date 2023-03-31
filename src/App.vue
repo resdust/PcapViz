@@ -11,7 +11,7 @@ document.title = 'Viz of Honeypot Network Traffic'
     <nav>
       <RouterLink to="/">Overview</RouterLink>
       <RouterLink to="/port/60">Ports</RouterLink>
-      <RouterLink to="/ipcount">IP Statistic</RouterLink>
+      <RouterLink to="/ipcount">IP Geo Distribution</RouterLink>
     </nav>
   </header>
   <main>

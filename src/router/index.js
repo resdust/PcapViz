@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import VolumeView from '@/views/VolumeView.vue'
 import PortVolumeView from '@/views/PortVolumeView.vue'
-import PieView from '@/views/PieView.vue'
+import MapView from '@/views/MapView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,7 +23,7 @@ const router = createRouter({
     {
       path: '/ipcount',
       name: 'IPcount',
-      component: PieView
+      component: MapView
     }
   ]
 })

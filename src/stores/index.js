@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import {useMapStore} from './getMap'
 import axios from 'axios'
 
 const usePortVolumeStore = defineStore('portTimeVolume', {
@@ -154,4 +155,4 @@ const useIPCountStore = defineStore('ipCount', {
     },
   },
 })
-export {useTimeVolumeStore, usePortVolumeStore, useIPCountStore, useProtocolVolumeStore}
+export {useTimeVolumeStore, usePortVolumeStore, useIPCountStore, useProtocolVolumeStore, useMapStore}
