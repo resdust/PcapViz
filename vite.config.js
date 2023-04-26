@@ -10,5 +10,10 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
-  }
+  },
+  "scripts": {
+    "build": "vite build",
+    "preview": "vite preview --port 8080"
+  },
+  base:'PcapViz'
 })
