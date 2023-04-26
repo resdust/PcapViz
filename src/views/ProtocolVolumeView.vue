@@ -2,9 +2,9 @@
 // load json file from server
 import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { usePortVolumeStore } from '@/stores/index.js'
-import { storeToRefs } from 'pinia'
+import { useTimeVolumeStore } from '@/stores/index.js'
 import formItem from '@/components/formItem.vue'
+import { storeToRefs } from 'pinia'
 import { selectChartRange } from '@/utils/chartUtils.js'
 import * as echarts from 'echarts'
 import styles from '@/assets/styles.js'
@@ -12,11 +12,12 @@ import styles from '@/assets/styles.js'
 const route = useRoute()
 
 let interval = route.params.interval
-let showSearchBar = ref(false)
-
+// convert inteval from seconds to mininutes, remaining 2 decimal places
 const title = (interval) => 'Packets over Each ' + parseInt(interval) + ' mins'
-const store = usePortVolumeStore()
+const store = useTimeVolumeStore()
 const { volumeData } = storeToRefs(store)
+
+let showSearchBar = ref(false)
 
 const dailyVolumeChart = ref(null)
 store.getVolumeData(interval)
@@ -35,7 +36,6 @@ const options = {
     orient: 'horizontal',
     itemStyle: styles.myItemStyle.itemStyle,
   },
-  // color: styles.themeColor,
   toolbox: {
     feature: {
       dataZoom: {
@@ -53,8 +53,7 @@ const options = {
     }
   },
   grid: {
-    bottom: 90,
-    left: 100,
+    bottom: 90
   },
   dataZoom: [{
     type: 'inside'
@@ -70,14 +69,22 @@ const options = {
       show: false
     }
   },
-  yAxis: {
-    splitArea: {
-      show: false
+  yAxis: [
+    {
+      type: 'value',
+      name: 'Packets',
+      axisLabel: {
+        formatter: '{value} packets'
+      }
     },
-    axisLabel: {
-      formatter: '{value} packets'
+    {
+      type: 'value',
+      name: 'Volume',
+      axisLabel: {
+        formatter: '{value} KB'
+      }
     }
-  },
+  ],
   series: [
 
   ],
@@ -87,47 +94,82 @@ var thisChart = null
 
 const reRender = function (store) {
   console.log('rerender...')
-  var datas = store.portVolume
-  var portsData = []
-
-  var colorMap = {}
-  for (let i = 0; i < datas.length / 2 + 1; i++) {
-    colorMap[datas[i].port] = styles.themeColor[i]
-  }
-
-  for (let i = 0; i < datas.length; i++) {
-    portsData.push({
-      name: datas[i].port,
-      type: 'bar',
-      stack: 'total',
-      data: datas[i].volume,
-      itemSteyle: {
-        color: colorMap[datas[i].port],
-      },
-      tooltip: {
-        valueFormatter: function (value) {
-          return value + ' Packets';
-        }
-      },
-      emphasis: {
-        focus: 'series'
-      },
-    })
-  }
   thisChart.setOption({
     xAxis: {
       type: 'category',
       data: store.Timeline,
     },
     yAxis: {},
-    series: portsData
+    series: [
+      {
+        name: 'UDP output',
+        type: 'line',
+        stack: 'total',
+        data: store.UDPOutVolume,
+        large: true,
+        itemSteyle: {
+          color: '#e67e22',
+        },
+        emphasis: {
+          focus: 'series'
+        },
+      },
+      {
+        name: 'UDP income',
+        type: 'line',
+        stack: 'total',
+        data: store.UDPInVolume,
+        large: true,
+        itemSteyle: {
+          color: '#d35400',
+        },
+        emphasis: {
+          focus: 'series'
+        },
+      },
+      {
+        name: 'TCP output',
+        type: 'line',
+        stack: 'total',
+        data: store.TCPOutVolume,
+        large: true,
+        itemSteyle: {
+          color: '#3498db',
+        },
+        emphasis: {
+          focus: 'series'
+        },
+      },
+      {
+        name: 'TCP income',
+        type: 'line',
+        stack: 'total',
+        data: store.TCPInVolume,
+        large: true,
+        itemSteyle: {
+          color: '#2980b9',
+        },
+        emphasis: {
+          focus: 'series'
+        },
+      },
+    ]
   })
-  handleRangeChange()
+  handleIntervalChange()
   thisChart.hideLoading()
-  console.log('rerender done')
+  console.log('rerender done.')
+}
+
+const chageChartTitle = function (title) {
+  thisChart.setOption({
+    title: {
+      text: title
+    }
+  })
 }
 
 watch(volumeData, (newValue, oldValue) => {
+  // console.log('watch volumeData', newValue, oldValue)
   reRender(store)
   showSearchBar.value = true
 })
@@ -138,21 +180,11 @@ onMounted(() => {
   thisChart.showLoading()
   thisChart.resize()
   thisChart.setOption(options)
-  // console.log('options', options)
-  // thisChart.hideLoading()
 
   window.addEventListener('resize', function () {
     thisChart.resize()
   })
 })
-
-const changeChartTitle = function (title) {
-  thisChart.setOption({
-    title: {
-      text: title
-    }
-  })
-}
 
 let startDate = '2023-02-09'
 let duration = 7
@@ -175,7 +207,7 @@ function handleRangeChange() {
 function handleIntervalChange() {
   console.log('handleIntervalChange', interval)
   thisChart.showLoading()
-  changeChartTitle(title(interval))
+  chageChartTitle(title(interval))
   store.getVolumeData(interval)
   thisChart.hideLoading()
 }
@@ -189,7 +221,7 @@ function handleIntervalChange() {
           <input v-model="startDate" type="date" placeholder="Select date" @change="handleRangeChange" />
         </formItem>
         <formItem label="Interval (Mins)">
-          <input v-model="interval" type="text" @change="handleIntervalChange" />
+          <input v-model="interval" type="text" @change="handleIntervalChange" @keyup.enter="handleIntervalChange" />
         </formItem>
         <formItem label="Durateion (Days)">
           <!-- select 1 week or 3 days -->
