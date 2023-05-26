@@ -36,32 +36,6 @@ const options = {
     orient: 'horizontal',
     itemStyle: styles.myItemStyle.itemStyle,
   },
-  // color: styles.themeColor,
-  // visualMap: {
-  //   top: 50,
-  //   right: 10,
-  //   pieces: [
-  //     {
-  //       gt: 0,
-  //       lte: 10,
-  //       color: styles.themeColor[0]
-  //     },
-  //     {
-  //       gt: 10,
-  //       lte: 100,
-  //       color: '#FC7D02'
-  //     },
-  //     {
-  //       gt: 100,
-  //       lte: 1000,
-  //       color: '#FD0100'
-  //     },
-  //     {
-  //       gt: 1000,
-  //       color: '#AA069F'
-  //     },
-  //   ]
-  // },
   toolbox: {
     feature: {
       dataZoom: {
@@ -162,8 +136,8 @@ const reRender = function (store) {
     yAxis: {},
     series: [
       {
-        name: 'Outgoing',
-        type: 'line',
+        name: 'Outgoing Packets',
+        type: 'bar',
         data: store.OutPackets,
         large: true,
         tooltip: {
@@ -179,8 +153,8 @@ const reRender = function (store) {
         },
       },
       {
-        name: 'Incoming',
-        type: 'line',
+        name: 'Incoming Packets',
+        type: 'bar',
         data: store.InPackets,
         large: true,
         tooltip: {
@@ -196,8 +170,8 @@ const reRender = function (store) {
         },
       },
       {
-        name: 'Outgoing',
-        type: 'bar',
+        name: 'Outgoing Bytes',
+        type: 'line',
         stack: 'total',
         yAxisIndex: 1,
         data: store.OutBytes,
@@ -215,8 +189,8 @@ const reRender = function (store) {
         },
       },
       {
-        name: 'Incoming',
-        type: 'bar',
+        name: 'Incoming Bytes',
+        type: 'line',
         stack: 'total',
         yAxisIndex: 1,
         data: store.InBytes,
