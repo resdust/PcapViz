@@ -1,6 +1,9 @@
 # plot-pcap
 
-This template should help get you started developing with Vue 3 in Vite.
+This is the frontend project with [PcapAnalyzer](https://github.com/resdust/PcapAnalyzer). 
+After you successfully started data server on your machine, visit https://resdust.github.io/PcapViz for interactable charts and discover insights from your data.
+
+For developers, after pull your branch into master branch, the GitHub workflow will be automatically triggered to build the project and update the pages.
 
 ## Recommended IDE Setup
 
